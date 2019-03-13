@@ -1,0 +1,10 @@
+{
+    "pc": {
+        "url": "hunghoo/vue-tpl",
+        "branch": "#pc-tpl"
+    },
+    "mobile": {
+        "url": "hunghoo/vue-tpl", 
+        "branch": "#mobile-tpl"
+    }
+}
