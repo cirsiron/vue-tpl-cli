@@ -1,6 +1,6 @@
 {
   "name": "vue-tpl-cli",
-  "version": "0.0.5",
+  "version": "0.1.7",
   "description": "",
   "main": "./bin/index",
   "bin": {
@@ -10,8 +10,9 @@
     "dev": "node ./bin/index"
   },
   "keywords": [],
-  "author": "",
+  "author": "cristhenis",
   "license": "ISC",
+  "email": "hunghoo@163.com",
   "dependencies": {
     "chalk": "^2.4.2",
     "commander": "^2.19.0",

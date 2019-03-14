@@ -1,110 +1,31 @@
 #!/usr/bin/env node
 
-const { prompt } = require('inquirer');
 const program = require('commander');
-const chalk = require('chalk');
-const download = require('download-git-repo');
-const ora = require('ora');
-const fs = require('fs');
-
-const { init, add, update, del} = require('../commander');
-const { readFile, writeFile } = require('../common');
-
-const tplList = require(`${__dirname}/../tpl`)
-const tplLists = Object.keys(tplList) || [];
-
-const getQuestions = function(defaultName) {
-    return [
-        {
-            type: 'input',
-            name: 'name',
-            message: 'Project Name',
-            default: defaultName,
-            filters(val) {
-                return val.trim()
-            },
-            validate(val) {
-                const validate = (val.trim().split(' ')).length === 1;
-                return validate || 'Project Name is not allowed to have space';
-            }
-        },
-        {
-            type: 'list',
-            name: 'template',
-            message: 'choice project template',
-            choices: tplLists,
-            default: tplLists[0]
-        },
-        {
-            type: 'input',
-            name: 'description',
-            message: 'Project Description',
-            default: 'A Vue Project'
-        },
-        {
-            type: 'input',
-            name: 'author',
-            message: 'Author Name',
-            default: 'Project author'
-        }
-    ]
-}
-
+const { init, add} = require('../commander');
+const package = require('../package.json');
   
 
-module.exports = program.version('0.1.0', '-v. --version')
+program.version(package.version, '-v. --version');
+
+// 初始化
+program
     .command('init <projectName>')
+    .description('初始化新项目')
+    .alias('-i')
     .action((projectName) => {
-        if(fs.existsSync(projectName)) {
-            console.log(chalk.red('项目名称已存在,请重新输入!'));
-            return;
-        }
-        const defaultName = projectName || 'vue-project';
+        init(projectName);
+    })
 
-        prompt(getQuestions(defaultName))
-            .then(({name, template, description, author}) => {
-                const projectName = name;
-                const tplName = template;
-                const gitRepo = tplList[tplName].url;
-                const gitBranch = tplList[tplName].branch;
-
-                const spiner = ora('Downloading...');
-                spiner.start();
-                
-                download(`${gitRepo}${gitBranch}`, `./${projectName}`, (err) => {
-                    if(err) {
-                        console.log(chalk.red(err))
-                        process.exit();
-                    }
-                    const packageUrl = `./${projectName}/package.json`
-                    readFile(packageUrl).then(function(data) {
-                        const packageJson = JSON.parse(data);
-                        packageJson.name = projectName;
-                        packageJson.description = description;
-                        packageJson.author = author;
-                        
-                        const updatedJson = JSON.stringify(packageJson, null, 2);
-                        return updatedJson;
-                    }, function(err) {
-                        console.log(chalk.red(err))
-                    }).then(function(res) {
-                        writeFile(packageUrl, res).then(function() {
-                            spiner.succeed();
-                            console.log('')
-                            console.log(chalk.green('项目已成功初始化!'))
-                            console.log('')
-                            console.log(`${chalk.yellow(`cd ${name}`)}`)
-                            console.log(`${chalk.yellow('npm install')}`)
-                            console.log(`${chalk.yellow('npm run dev')}`)
-                            console.log('')
-                        }, function(err) {
-                            spiner.fail();
-                            console.log(chalk.red(err))
-                        })
-                    })
-                })
-                console.log(name, template, description, author);
-            })
+// 添加新模板
+program
+    .command('add <templateName>')
+    .alias('-a')
+    .action((templateName) => {
+        add(templateName);
     })
 
 program.parse(process.argv);
+
+if(!program.args.length){
+    program.help()
+}
