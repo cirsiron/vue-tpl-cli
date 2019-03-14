@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const { prompt } = require('inquirer');
 const program = require('commander');
 const chalk = require('chalk');
@@ -50,7 +52,7 @@ const getQuestions = function(defaultName) {
 
   
 
-program.version('0.1.0', '-v. --version')
+module.exports = program.version('0.1.0', '-v. --version')
     .command('init <projectName>')
     .action((projectName) => {
         if(fs.existsSync(projectName)) {
