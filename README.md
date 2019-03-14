@@ -1,13 +1,22 @@
-### vue模版脚手架
+### a simple vue multi client template scaffolding (vue多端模版脚手架)
 
-- 默认存在两个模版
+- (There are two default tmeplates)
     + pc
     + mobile
 
-- 使用方法
-    全局安装:
+- (Installation)
     ```
-    npm i -g vue-tpl-cli 
+   $ npm i -g vue-tpl-cli // npm
+    // or
+   $ yarn global add vue-tpl-cli // yarn 
     ```
-    命令行:
-    vue-tpl-cli init <your project name>
+
+- (Usage)
+    ```
+    vue-tpl-cli init [your project name]
+    ```
+
+- Example:
+    ```
+    $ vue-tpl-cli init my-project
+    ```
